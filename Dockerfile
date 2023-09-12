@@ -6,7 +6,8 @@ WORKDIR /home/choreouser
 
 COPY entrypoint.sh ./
 
-RUN apk add --no-cache iproute2 vim netcat-openbsd &&\
+RUN apk update &&\
+    apk add --no-cache bash iproute2 vim netcat-openbsd &&\
     wget -O temp.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip &&\
     unzip temp.zip xray geoip.dat geosite.dat &&\
     mv xray x &&\
