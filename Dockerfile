@@ -1,2 +1,2 @@
-FROM kahunama/chox2:latest
+FROM kahunama/chox:latest
 USER 10014
