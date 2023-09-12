@@ -2,7 +2,10 @@
 
 # 定义 UUID 及 伪装路径,请自行修改.(注意:伪装路径以 / 符号开始,为避免不必要的麻烦,请不要使用特殊符号.)
 UUID=${UUID:-'28c636a3-1e75-43c9-ac15-33308d060eb7'}
-WSPATH=${WSPATH:-'choreo'}
+VMESS_WSPATH=${VMESS_WSPATH:-'/startvm'}
+VLESS_WSPATH=${VLESS_WSPATH:-'/startvl'}
+TROJAN_WSPATH=${TROJAN_WSPATH:-'/starttr'}
+SS_WSPATH=${SS_WSPATH:-'/startss'}
 
 # 生成配置文件
 cat > /tmp/config.json <<EOF
@@ -14,7 +17,7 @@ cat > /tmp/config.json <<EOF
     },
     "inbounds":[
         {
-            "port":8443,
+            "port":8080,
             "protocol":"vless",
             "settings":{
                 "clients":[
@@ -29,19 +32,19 @@ cat > /tmp/config.json <<EOF
                         "dest":3001
                     },
                     {
-                        "path":"/${WSPATH}-vless",
+                        "path":"${VLESS_WSPATH}",
                         "dest":3002
                     },
                     {
-                        "path":"/${WSPATH}-vmess",
+                        "path":"${VMESS_WSPATH}",
                         "dest":3003
                     },
                     {
-                        "path":"/${WSPATH}-trojan",
+                        "path":"${TROJAN_WSPATH}",
                         "dest":3004
                     },
                     {
-                        "path":"/${WSPATH}-shadowsocks",
+                        "path":"${SS_WSPATH}",
                         "dest":3005
                     }
                 ]
@@ -84,14 +87,15 @@ cat > /tmp/config.json <<EOF
                 "network":"ws",
                 "security":"none",
                 "wsSettings":{
-                    "path":"/${WSPATH}-vless"
+                    "path":"${VLESS_WSPATH}"
                 }
             },
             "sniffing":{
                 "enabled":true,
                 "destOverride":[
                     "http",
-                    "tls"
+                    "tls",
+                    "quic"
                 ],
                 "metadataOnly":false
             }
@@ -111,14 +115,15 @@ cat > /tmp/config.json <<EOF
             "streamSettings":{
                 "network":"ws",
                 "wsSettings":{
-                    "path":"/${WSPATH}-vmess"
+                    "path":"${VMESS_WSPATH}"
                 }
             },
             "sniffing":{
                 "enabled":true,
                 "destOverride":[
                     "http",
-                    "tls"
+                    "tls",
+                    "quic"
                 ],
                 "metadataOnly":false
             }
@@ -138,14 +143,15 @@ cat > /tmp/config.json <<EOF
                 "network":"ws",
                 "security":"none",
                 "wsSettings":{
-                    "path":"/${WSPATH}-trojan"
+                    "path":"${TROJAN_WSPATH}"
                 }
             },
             "sniffing":{
                 "enabled":true,
                 "destOverride":[
                     "http",
-                    "tls"
+                    "tls",
+                    "quic"
                 ],
                 "metadataOnly":false
             }
@@ -166,14 +172,15 @@ cat > /tmp/config.json <<EOF
             "streamSettings":{
                 "network":"ws",
                 "wsSettings":{
-                    "path":"/${WSPATH}-shadowsocks"
+                    "path":"${SS_WSPATH}"
                 }
             },
             "sniffing":{
                 "enabled":true,
                 "destOverride":[
                     "http",
-                    "tls"
+                    "tls",
+                    "quic"
                 ],
                 "metadataOnly":false
             }
@@ -192,17 +199,23 @@ cat > /tmp/config.json <<EOF
             "tag":"WARP",
             "protocol":"wireguard",
             "settings":{
-                "secretKey":"cKE7LmCF61IhqqABGhvJ44jWXp8fKymcMAEVAzbDF2k=",
+                "secretKey":"YFYOAdbw1bKTHlNNi+aEjBM3BO7unuFC5rOkMRAz9XY=",
                 "address":[
                     "172.16.0.2/32",
-                    "fd01:5ca1:ab1e:823e:e094:eb1c:ff87:1fab/128"
+                    "2606:4700:110:8a36:df92:102a:9602:fa18/128"
                 ],
                 "peers":[
                     {
                         "publicKey":"bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
+                        "allowedIPs":[
+                            "0.0.0.0/0",
+                            "::/0"
+                        ],
                         "endpoint":"162.159.193.10:2408"
                     }
-                ]
+                ],
+                "reserved":[78, 135, 76],
+                "mtu":1280
             }
         }
     ],
